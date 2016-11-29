@@ -7,15 +7,17 @@ struct
   open Seq
 
   (* Remove this line when you're done. *)
-  exception NotYetImplemented
 
   infix 6 ++ --
   infix 7 **
 
+  fun at con index = 
+    if index < (length con ) then nth con index
+    else ZERO
   fun x ++ y = BNA.add (x, y)
   fun x -- y = BNS.sub (x, y)
   fun x ** y =
-      raise NotYetImplemented
+
 
   val mul = op**
 end
