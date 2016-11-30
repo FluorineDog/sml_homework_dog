@@ -16,10 +16,9 @@ struct
       (*val rawstr = fn (beg,size) => (reduce (fn(a,b)=>a^b) "" (map (fn CPAREN=>")"|OPAREN=>"(") (subseq parens (beg,size))));*)
       (*val inte = fn x => (Int.toString x)^" "*)
       (*fun put(a, b, c, d) = print(inte(a)^inte(b)^inte(a)^inte(b)^"\n")*)
-      fun  
-         dist (_, 0) = (~1, ~1, ~1, ~1)
-        |dist (beg, 1) = if(nth parens beg = OPAREN) then (0,0,1,0) else (1,0,0,0)
-        |dist (beg:int, size:int):int*int*int*int = 
+      fun dist (_, 0) = (~1, ~1, ~1, ~1)
+        | dist (beg, 1) = if(nth parens beg = OPAREN) then (0,0,1,0) else (1,0,0,0)
+        | dist (beg:int, size:int):int*int*int*int = 
         let
           val mid = beg + size div 2;
           val (leftL, midL, rightL, maxL) = dist(beg, size div 2)
