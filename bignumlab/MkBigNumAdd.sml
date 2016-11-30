@@ -8,6 +8,16 @@ struct
   infix 6 ++
   datatype carry = GEN | PROP | STOP
 
+  fun simplify res = 
+    let
+      val index_seq = mapIdx (fn (_,ZERO)=>0|(n,ONE)=>n) res
+      fun copy (a,0) = a
+        | copy (_,b) = b
+      val len = 1 + reduce copy 0 index_seq 
+    in     
+      take (res, len)
+    end
+
   fun x ++ y =
     let 
       val lx = length x 
@@ -34,7 +44,7 @@ struct
         | finalfix (a,GEN)  = if a=PROP then ZERO else ONE   
       val result = map finalfix (zip raw patch)
     in
-      if nth result (length result - 1) = ZERO then take (result, (length result - 1)) else result 
+      simplify result
     end
 
   val add = op++
