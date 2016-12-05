@@ -10,15 +10,15 @@ struct
 
   fun simplify res = 
     let
-      val index_seq = mapIdx (fn (_,ZERO)=>0|(n,ONE)=>n) res
+      val index_seq = mapIdx (fn (_,ZERO)=>~1|(n,ONE)=>n) res
       fun copy (a,0) = a
         | copy (_,b) = b
-      val len = 1 + reduce copy 0 index_seq 
+      val len = 1 + reduce copy ~1 index_seq 
     in     
       take (res, len)
     end
-
-  fun x ++ y =
+    
+   fun x ++ y =
     let 
       val lx = length x 
       val ly = length y 
