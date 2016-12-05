@@ -12,8 +12,8 @@ struct
   infix 7 **
   fun simplify res = 
     let
-      val index_seq = mapIdx (fn (_,ZERO)=>~1|(n,ONE)=>n) res
-      fun copy (a,0) = a
+      val index_seq = mapIdx (fn (_,ZERO)=>(~1)|(n,ONE)=>n) res
+      fun copy (a,~1) = a
         | copy (_,b) = b
       val len = 1 + reduce copy ~1 index_seq 
     in     
