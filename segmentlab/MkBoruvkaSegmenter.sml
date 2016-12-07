@@ -13,8 +13,8 @@ struct
   type edge = vertex * vertex * weight
 
   (* Remove this exception when you're done! *)
-  exception NotYetImplemented
+  (*exception NotYetImplemented*)
 
-  fun findSegments (E, n) initial_credit =
-    raise NotYetImplemented
+  fun findSegments (E, n) initial_credit = empty()
+    (*raise NotYetImplemented*)
 end

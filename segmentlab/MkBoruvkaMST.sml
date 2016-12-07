@@ -10,9 +10,10 @@ struct
   type edge = vertex * vertex * weight
 
   (* Remove this exception when you're done! *)
-  exception NotYetImplemented
+  (*exception NotYetImplemented*)
 
   fun MST (E : edge seq, n : int) : edge seq =
-    raise NotYetImplemented
+    empty()
+    (*raise NotYetImplemented*)
 
 end
