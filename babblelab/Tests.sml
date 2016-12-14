@@ -7,6 +7,15 @@ struct
   val testsChoose : (((string * int) list) * real) list  = [
     ([("test", 10)], 0.5),
     ([("test", 2), ("awesome", 2)], 0.5),
+    ([("test", 2), ("awesome", 2)], 0.0),
+    ([("test", 2), ("awesome", 2)], 0.49),
+    ([("test", 2), ("awesome", 2)], 0.51),
+    ([("test", 2), ("awesome", 2)], 1.0),
+    ([("test", 2), ("awesome", 2)], 0.5),
+    ([("yay", 1), ("woah", 2), ("oh", 3), ("yup", 4)], 0.47),
+    ([("yay", 1), ("woah", 2), ("oh", 3), ("yup", 4)], 0.6),
+    ([("yay", 1), ("woah", 2), ("oh", 3), ("yup", 4)], 0.1),
+    ([("yay", 1), ("woah", 2), ("oh", 3), ("yup", 4)], 0.3),
     ([("yay", 1), ("woah", 2), ("oh", 3), ("yup", 4)], 0.47)
   ]
 
