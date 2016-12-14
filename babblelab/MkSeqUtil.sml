@@ -25,7 +25,8 @@ struct
     map (fn (a, c) => (a, length c))
         (collect cmp (map (fn a => (a, ())) s))
         
-  fun /\/\ f a b = f(a,b)
+  fun /\ f a b = f(a,b)
+  
   fun choose (hist : 'a hist) (p : real) : 'a = 
     if p>1.0 orelse p<0.0 then raise OutOfRange
     else
@@ -33,7 +34,7 @@ struct
       val id = #1 (nth hist 0)
       fun second_plus ((_,a),(s,b)) = (s,a+b)
       val tmpHist = scani second_plus (id,0) hist
-      val standard = (Real.ceil o /\/\ op* p o Real.fromInt o #2 o nth tmpHist) (length tmpHist - 1)
+      val standard = (Real.ceil o /\ op* p o Real.fromInt o #2 o nth tmpHist) (length tmpHist - 1)
       fun rightmostLesser (std) (a:'a*int, b) = if ((#2 a) >= std) then a else b
     in  
       #1 (reduce (rightmostLesser standard) (id,0) tmpHist)

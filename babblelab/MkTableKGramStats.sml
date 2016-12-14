@@ -14,25 +14,24 @@ struct
 
   (* Remove this line when you're done *)
   exception NotYetImplemented
-
   (* You must define the abstract kgramstats type *)
-  type kgramstats = (token seq) T.table
+  type kgramstats = (token hist) T.table * int
 
   fun makeStats (corpus : string) (maxK : int) : kgramstats =
     let 
-        val null = T.fromSeq (empty())
-        fun construct (k:int):(token seq * token) = 
+      val null = T.fromSeq (empty())
+      val tokenlist = tokens (not o Char.isAlphaNum) corpus
+      val size = length tokenlist
+      fun extract k beg = (subseq tokenlist (beg, k), nth tokenlist (beg+k))
+      fun construct (k:int) = tabulate (extract k) (size - k)
+      val final_seq = flatten tabulate construct (1+maxK)
     in
-       null 
+      (Table.map (histogram String.compare) (Table.collect final_seq), maxK)
     end
-      (*raise NotYetImplemented*)
 
-  fun lookupExts (stats : kgramstats) (kgram : kgram)
-    : token hist = 
-   (*: (token * int) seq =*)
-      raise NotYetImplemented
+  fun lookupExts (stats : kgramstats) (kgram : kgram): token hist =
+    Option.getOpt (T.find (#1 stats) kgram, empty())
 
   fun maxK (stats : kgramstats) : int =
-      raise NotYetImplemented
-
+    #2 stats
 end

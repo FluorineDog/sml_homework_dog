@@ -14,7 +14,10 @@ struct
   exception NotYetImplemented
 
   fun randomSentence (stats : KS.kgramstats) (n : int) (seed : R.rand) =
-      raise NotYetImplemented
+    case stats of (gram, maxK) =>
+    let 
+    in
+    ed 
 
   fun randomDocument (stats : KS.kgramstats) (n : int) (seed : R.rand) =
       raise NotYetImplemented
