@@ -24,7 +24,7 @@ struct
       val size = length tokenlist
       fun extract k beg = (subseq tokenlist (beg, k), nth tokenlist (beg+k))
       fun construct (k:int) = tabulate (extract k) (size - k)
-      val final_seq = flatten tabulate construct (1+maxK)
+      val final_seq = flatten (tabulate construct (1+maxK))
     in
       (Table.map (histogram String.compare) (Table.collect final_seq), maxK)
     end
