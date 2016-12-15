@@ -18,9 +18,8 @@ struct
         val maxK = KS.maxK stats 
         fun next gram = if length gram = maxK+1 then drop (gram,1) else gram
         val randomSeq = Rand.randomRealSeq seed (SOME(0.0,1.0)) n
-        val hehehe = map (print o (fn x=>x^"+") o Real.toString) randomSeq
         fun operate ((gram,app), randnum) =
-          case KS.lookupExts stats (next gram) of tmpHist=>
+          case KS.lookupExts stats (next gram) of tmpHist=> if length tmpHist = 0 then operate((drop (gram,1),""),randnum) else
             let 
               val app = Util.choose tmpHist randnum
             in
@@ -28,22 +27,16 @@ struct
             end
         val tmp = iterih operate (empty(), "") randomSeq
       in
-        (*"hasjfdhasfkld"*)
         ((String.concatWith " " o toList o map (fn (_, s)=>s)) tmp)^"."
       end
 
   fun randomDocument (stats : KS.kgramstats) (n : int) (seed : R.rand) =
     let
-      val randomSeq = Rand.randomIntSeq seed (SOME(5, 11)) 2
-      val s5 = (fn len => randomSentence stats len seed) 5;
-      val end_of_s5 = print "\nend of s5\n"
-      val s10 = (fn len => randomSentence stats len seed) 10;
-      val end_of_s10 = print "\nend of s10\n"
-      (*val tmp2 = map  (fn len => randomSentence stats len seed) randomSeq*)
-      (*val tmp = toList tmp2*)
-      val hehehe = map (print o (fn x=>x^"+") o Int.toString) randomSeq
+      val lenSeq = Rand.randomIntSeq seed (SOME(5, 11)) n
+      val seedSeq = map R.fromInt (Rand.randomIntSeq seed NONE n)
+      val sentenceSeq = map2  (fn (len, seqseed) => randomSentence stats len seqseed) lenSeq seedSeq
+      val sentList = toList sentenceSeq
     in
-      (*(String.concatWith " " o toList o map (fn len => randomSentence stats len seed)) randomSeq*)
-      "jsadfkjldafkjkfas"
+      String.concatWith " " sentList
     end
 end
