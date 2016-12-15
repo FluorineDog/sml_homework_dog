@@ -16,6 +16,9 @@ struct
   (* You must define the following two types and
    * explain your decision here with comments.
    *)
+
+  (*graph is of adjacency list*)
+  (*asp is the reverse of asp DAG*)
   type graph = Set.set table
   type asp = graph
 
@@ -30,7 +33,9 @@ struct
 
   fun reverseGraph (G:graph) = 
     let
-      val edges = (flatten o map (fn(src,destSet)=>map (fn dest=>(src, dest)) (Set.toSeq destSet)) o Table.toSeq) G 
+      fun tableSlot2seq (src, destSet) = 
+        map (fn dest=>(src, dest)) (Set.toSeq destSet)
+      val edges = (flatten o map tableSlot2seq o Table.toSeq) G 
       val rev_edges = map (fn (src, dest)=>(dest,src)) edges 
     in
       makeGraph rev_edges
@@ -54,7 +59,8 @@ struct
       fun BFS (visited:graph) frontier = 
         let
           val frontG = Table.extract(G, frontier)
-          fun isVisited v = (Option.isSome o find visited) v orelse Set.find frontier v
+          fun isVisited v = 
+            (Option.isSome o find visited) v orelse Set.find frontier v 
           val newEdgeG = Table.map (Set.filter (not o isVisited)) frontG
           val newF = Table.reduce Set.union (Set.empty()) newEdgeG
           val newVisited = Table.merge Set.union (newEdgeG, visited)
@@ -69,7 +75,7 @@ struct
     let val sz = length s in tabulate (fn n=>nth s (sz-1-n)) sz end
 
   (* Task 2.5 *)
-  fun report (A : asp) (v : vertex) : vertex seq seq = 
+  fun report (A : asp) (destination : vertex) : vertex seq seq = 
     let
       fun operate (vt:vertex) = 
         case outNeighbors A vt of NG => 
@@ -77,6 +83,6 @@ struct
          then singleton (vt::nil) 
          else (map (fn body=>vt::body) o flatten o map operate) NG
     in
-      (map (reverseSeq o Seq.fromList) o operate) v
+      (map (reverseSeq o Seq.fromList) o operate) destination
     end
 end
