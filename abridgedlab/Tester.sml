@@ -15,6 +15,7 @@ struct
   structure StringAStar : ASTAR =
     MkAStar(structure Vtx = StringElt)
 
-
+  
   (* Put stuff here to test your implementations! *)
+  fun testBridges = 
 end
