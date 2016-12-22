@@ -44,15 +44,15 @@ struct
     let 
       val tests = fromList Tests.tests 
       val refOutput = fromList Tests.result
-      (*fun regulate s = sort (orderseal EdgeElt.equal) (map (fn (a,b)=>(Int.min (a,b), Int.max(a,b))) s)*)
-      fun regulate s = s
-      val bridgeF = Bridges.findBridges o Bridges.makeGraph
+      fun regulate s = sort EdgeElt.compare (map (fn (a,b)=>(Int.min (a,b), Int.max(a,b))) s)
+      (*fun regulate s = s*)
+      val bridgeF = regulate o Bridges.findBridges o Bridges.makeGraph
       
-      val pack = map2 (fn (testcase, answer)=>(testcase, Result.Value answer)) tests refOutput
+      val pack = map2 (fn (testcase, answer)=>(testcase, Result.Value (regulate answer))) tests refOutput
       val checker = Checker.fromOutput (bridgeF, EdgeSeqElt.equal)
       val logger = Logger.create (EdgeSeqElt.toString o #1, EdgeSeqElt.toString)
       val _ = Tester.testGroup checker logger (toList pack)
-      val _ = map (print o (fn x => x^"\n") o GraphSeqElt.toString o Bridges.makeGraph) tests
+      (*val _ = map (print o (fn x => x^"\n") o GraphSeqElt.toString o Bridges.makeGraph) tests*)
     in
       ()
     end
