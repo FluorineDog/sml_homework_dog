@@ -4,6 +4,7 @@ struct
   open Seq
   structure ST = STSeq
 
+  exception heheda 
   type vertex = int
   type edge = vertex * vertex
   type edges = edge seq
@@ -21,8 +22,11 @@ struct
       val graphtable = collect Int.compare biedges 
     in
       inject graphtable nullseq
+      (*singleton(singleton 0)*)
     end 
   
+
+  fun pin x = print ("$"^(Int.toString x))
   fun construct (id:'a) (n:int):'a ST.stseq = (ST.fromSeq o tabulate (fn _=>id)) n
   infix 8 @@
   fun op@@ (container, n) = ST.nth container n
@@ -31,7 +35,7 @@ struct
       val size = length G
       val inf = size*2+1
       (*            disc,fin,parent,min_reach *)
-      type State = int*int*vertex*int
+      type State = (int*int*vertex*int) option
       type StateSeq = State ST.stseq
       type discSeq = int option ST.stseq
       fun DFS ((p, S:discSeq, R:StateSeq, min_reached, t),cur) = 
@@ -43,20 +47,25 @@ struct
             val S' = ST.update (cur, SOME t) S
             val (_, S'', R', new_min, new_t) = iter DFS (cur, S', R, inf, t+1) NGkP
             val final_min = Int.min (new_min, t)
-            val R' = ST.update (cur, (t, final_min, p, new_min)) R
+            val R'' = ST.update (cur, SOME (t, new_t, p, final_min)) R'
           in
-            (p, S'', R', final_min, new_t+1)
+            (p, S'', R'', final_min, new_t+1)
           end
+      
       val (_,_,final_record,_,_) =
-        DFS ((0, construct NONE size, construct (0,0,0,0) size, inf, 0),0)
+        iter DFS 
+        (~1, construct NONE size, construct NONE size, inf, 0)
+        (tabulate (fn x=>x) size)
+      
       val extractEdges =
         let 
-          fun convertor (dest, (disc,_,parent,min)) = 
-            ((parent, dest),min=disc andalso dest<>0)
+          fun convertor (dest, SOME (disc,_,parent,min)) = 
+            ((parent, dest),min=disc andalso parent <> ~1)
+            | convertor (dest, NONE) = raise heheda 
         in
           mapIdx convertor (ST.toSeq final_record)
         end
     in
-      (map #1 o filter #2 ) extractEdges 
+      (map #1 o filter #2) extractEdges 
     end
 end
