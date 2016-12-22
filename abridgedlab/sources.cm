@@ -1,6 +1,7 @@
 Group is
   support/support.cm
   MkBridges.sml
+  MkRefBridges.sml
   MkAStarCore.sml
   Tester.sml
   Tests.sml
