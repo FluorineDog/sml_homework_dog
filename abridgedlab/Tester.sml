@@ -1,6 +1,7 @@
 structure Tester =
 struct
   open ArraySequence
+  open StudentTestSuite
 
   structure Bridges : BRIDGES =
     MkBridges(structure STSeq = MkSTSequence(structure Seq = ArraySequence))
@@ -15,7 +16,11 @@ struct
   structure StringAStar : ASTAR =
     MkAStar(structure Vtx = StringElt)
 
-  
   (* Put stuff here to test your implementations! *)
-  fun testBridges = 
+  fun testBridges () = 
+    let 
+      
+    in
+      print "OK\n"
+    end
 end
