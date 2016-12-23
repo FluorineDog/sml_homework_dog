@@ -34,14 +34,17 @@ struct
                   of SOME _ => dijkstra' D Q'
                   | NONE =>
                     let
+                      (*v->u*)
+                      (*distance(x) = src_to_x + h(x)*)
+                      (*d = dist(v)*)
                       val insert = Table.insert (fn (x, _) => x)
                       val D' = insert (v, d) D
-                      fun relax (q, (u, w)) = PQ.insert (d+w, u) q
+                      fun relax (q, (u, w)) = PQ.insert (d - h v + h u + w, u) q
                       val Q'' = Table.iter relax Q' (N v)
                     in dijkstra' D' Q''
                     end
     
-      val sourceSet = (PQ.fromList o toList o map (fn x=>(0.0,x)) o Set.toSeq) S
+      val sourceSet = (PQ.fromList o toList o map (fn x=>(0.0+ h x, x)) o Set.toSeq) S
       val final = dijkstra' (Table.empty ()) sourceSet
       (*(PQ.singleton (0.0, u))*)
     in
