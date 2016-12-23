@@ -5,37 +5,7 @@ struct
 
   (* * * loggers * * *)
 
-  structure EdgeElt = MkPairElt(structure EltA = IntElt
-                                structure EltB = IntElt)
-  structure EdgeSeqElt = MkSeqElt(structure Elt = EdgeElt
-                                  structure Seq = ArraySequence)
-  structure EdgeSeqVertElt = MkPairElt(structure EltA = EdgeSeqElt
-                                       structure EltB = IntElt)
-  structure IntSeqElt = MkSeqElt(structure Elt = IntElt
-                                 structure Seq = ArraySequence)
-  structure StringPairElt = MkPairElt(structure EltA = StringElt
-                                      structure EltB = StringElt)
-  structure StringSeqElt = MkSeqElt(structure Elt = StringElt
-                                    structure Seq = ArraySequence)
-  structure GraphSeqElt = MkSeqElt(structure Elt = IntSeqElt
-                                   structure Seq = ArraySequence)
-  structure SeqPairElt = MkPairElt(structure EltA = IntSeqElt
-                                   structure EltB = IntSeqElt)
-  structure WeightedEdgeElt = MkTripleElt(structure EltA = IntElt
-                                   structure EltB = IntElt
-                                   structure EltC = RealElt)
-  structure WeightedEdgeSeqElt = MkSeqElt(structure Elt = WeightedEdgeElt
-                                   structure Seq = ArraySequence)
-  structure AStarElt = MkTripleElt(structure EltA = WeightedEdgeSeqElt
-                                structure EltB = SeqPairElt
-                                structure EltC = UnitElt)
-  structure AStarSeqElt = MkSeqElt(structure Elt = AStarElt
-                                   structure Seq = ArraySequence)
 
-  structure NumOut = IntElt
-  structure NumIn = EdgeSeqElt
-  structure OutNeighborsOut = IntSeqElt
-  structure OutNeighborsIn = EdgeSeqVertElt
 
   structure Bridges : BRIDGES =
     MkBridges(structure STSeq = MkSTSequence(structure Seq = ArraySequence))
@@ -52,10 +22,13 @@ struct
   structure StringAStar : ASTAR =
     MkAStar(structure Vtx = StringElt)
 
+  structure IntAstarElt = MkAStarElt(structure BaseElt = IntElt)
+
   fun orderseal f (a,b)= if f (a,b) then LESS else if f(b,a) then GREATER else EQUAL
   (* Put stuff here to test your implementations! *)
   fun testBridges () = 
-    let 
+    let
+      open IntAstarElt
       val tests = fromList Tests.testBridge
       val refOutput = fromList Tests.resultBridge
       fun regulate s = sort EdgeElt.compare (map (fn (a,b)=>(Int.min (a,b), Int.max(a,b))) s)
@@ -78,6 +51,7 @@ struct
   exception nyi
   fun testAStar () = 
     let
+      open IntAstarElt
       val tests:AStarSeqElt.t = fromList Tests.testAStar
       val refOutput = fromList Tests.resultAStar
       val s:AStarElt.t = raise nyi 

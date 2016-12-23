@@ -3,6 +3,7 @@ Group is
   MkBridges.sml
   MkRefBridges.sml
   MkAStarCore.sml
+  MkAStarElt.sml
   Tester.sml
   Tests.sml
   lib/util/StudentTestSuite.sml
