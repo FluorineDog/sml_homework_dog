@@ -4,6 +4,7 @@ struct
   open StudentTestSuite
 
   (* * * loggers * * *)
+
   structure EdgeElt = MkPairElt(structure EltA = IntElt
                                 structure EltB = IntElt)
   structure EdgeSeqElt = MkSeqElt(structure Elt = EdgeElt
@@ -16,9 +17,20 @@ struct
                                       structure EltB = StringElt)
   structure StringSeqElt = MkSeqElt(structure Elt = StringElt
                                     structure Seq = ArraySequence)
-
   structure GraphSeqElt = MkSeqElt(structure Elt = IntSeqElt
-                                 structure Seq = ArraySequence)
+                                   structure Seq = ArraySequence)
+  structure SeqPairElt = MkPairElt(structure EltA = IntSeqElt
+                                   structure EltB = IntSeqElt)
+  structure WeightedEdgeElt = MkTripleElt(structure EltA = IntElt
+                                   structure EltB = IntElt
+                                   structure EltC = RealElt)
+  structure WeightedEdgeSeqElt = MkSeqElt(structure Elt = WeightedEdgeElt
+                                   structure Seq = ArraySequence)
+  structure AStarElt = MkTripleElt(structure EltA = WeightedEdgeSeqElt
+                                structure EltB = SeqPairElt
+                                structure EltC = UnitElt)
+  structure AStarSeqElt = MkSeqElt(structure Elt = AStarElt
+                                   structure Seq = ArraySequence)
 
   structure NumOut = IntElt
   structure NumIn = EdgeSeqElt
@@ -44,8 +56,8 @@ struct
   (* Put stuff here to test your implementations! *)
   fun testBridges () = 
     let 
-      val tests = fromList Tests.tests 
-      val refOutput = fromList Tests.result
+      val tests = fromList Tests.testBridge
+      val refOutput = fromList Tests.resultBridge
       fun regulate s = sort EdgeElt.compare (map (fn (a,b)=>(Int.min (a,b), Int.max(a,b))) s)
       (*fun regulate s = s*)
       val bridgeF = regulate o Bridges.findBridges o Bridges.makeGraph
@@ -58,8 +70,20 @@ struct
       val logger2 = Logger.create (EdgeSeqElt.toString, EdgeSeqElt.toString)
       val _ = ignore (Tester.testGroup checker logger (toList pack))
       val _ = print "\n*** *** *** *** ***\n"
-      val _ = Tester.testGroup checker2 logger2 (Tests.tests)
+      val _ = Tester.testGroup checker2 logger2 (Tests.testBridge)
       (*val _ = map (print o (fn x => x^"\n") o GraphSeqElt.toString o Bridges.makeGraph) tests*)
+    in
+      ()
+    end
+  exception nyi
+  fun testAStar () = 
+    let
+      val tests:AStarSeqElt.t = fromList Tests.testAStar
+      val refOutput = fromList Tests.resultAStar
+      val s:AStarElt.t = raise nyi 
+      
+      
+      val m = fn s => case s of (seqWE, (seqS,seqT)) => (IntAStar.makeGraph seqWE)
     in
       ()
     end
