@@ -52,12 +52,16 @@ struct
   fun testAStar () = 
     let
       open IntAstarElt
+      open IntAStar
       val tests:AStarSeqElt.t = fromList Tests.testAStar
-      val refOutput = fromList Tests.resultAStar
-      val s:AStarElt.t = raise nyi 
+      val refOutput:PathElt.t seq = fromList Tests.resultAStar
+      fun gen s = case s of (seqWE, (seqS,seqT), h) => 
+        (findPath h o makeGraph) seqWE (Set.fromSeq seqS,Set.fromSeq seqT) 
+      val pack = map2 (fn (testcase, answer)=>(testcase, Result.Value answer)) tests refOutput
       
-      
-      val m = fn s => case s of (seqWE, (seqS,seqT)) => (IntAStar.makeGraph seqWE)
+      val checker = Checker.fromOutput(gen, PathElt.equal)
+      val logger = Logger.create(AStarElt.toString o #1, PathElt.toString)
+      val _ = Tester.testGroup checker logger (toList pack)
     in
       ()
     end

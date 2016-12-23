@@ -16,14 +16,15 @@ struct
       [],
       []
   ]
-  val heris = Real.fromInt
-  
+  val heris = fn 1=>0.1 | 2=>0.0 | _=> 10000.0 
   val testAStar = List.map 
   (fn (edges, (S, T),h) => (ArraySequence.% edges, (ArraySequence.% S, ArraySequence.% T),h)) 
   [
-      ([(1,2,0.2)],([1],[2]),heris)
+      ([(1,2,0.2)],([1],[2]),heris),
+      ([(1,2,0.2)],([1],[3]),heris)
   ]
-  val resultAStar = List.map ArraySequence.% [
-      [SOME (2,0.2)]
-  ]
+  val resultAStar = 
+      SOME (2,0.2)::
+      NONE::
+      nil
 end

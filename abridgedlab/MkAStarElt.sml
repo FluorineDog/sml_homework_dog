@@ -14,7 +14,11 @@ struct
                                     structure Seq = ArraySequence)
   structure GraphSeqElt = MkSeqElt(structure Elt = BaseSeqElt
                                    structure Seq = ArraySequence)
-
+  
+  structure SingleMappingELt = MkPairElt(structure EltA = BaseElt
+                                      structure EltB = RealElt)
+  structure MappingELt = MkSeqElt(structure Elt = SingleMappingELt
+                                 structure Seq = ArraySequence)
   structure SeqPairElt = MkPairElt(structure EltA = BaseSeqElt
                                    structure EltB = BaseSeqElt)
   structure WeightedEdgeElt = MkTripleElt(structure EltA = BaseElt
@@ -25,7 +29,15 @@ struct
   structure AStarElt = MkTripleElt(structure EltA = WeightedEdgeSeqElt
                                 structure EltB = SeqPairElt
                                 structure EltC = UnitElt)
+  structure AStarMapElt = MkTripleElt(structure EltA = WeightedEdgeSeqElt
+                                structure EltB = SeqPairElt
+                                structure EltC = MappingELt)                              
   structure AStarSeqElt = MkSeqElt(structure Elt = AStarElt
                                    structure Seq = ArraySequence)
-
+  structure AStarSeqMapElt = MkSeqElt(structure Elt = AStarMapElt
+                                    structure Seq = ArraySequence)
+  structure RoadElt = MkPairElt(structure EltA = BaseElt
+                                structure EltB = RealElt)
+  structure PathElt = MkOptionElt(structure Elt = RoadElt)
+  
 end

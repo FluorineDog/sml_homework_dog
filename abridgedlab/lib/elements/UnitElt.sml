@@ -6,7 +6,7 @@ struct
 
   val default = Real.fromInt
   fun equal (x,y) = true
-  fun compare (x,y) = EQUAL
-  fun hash x = 0
-  fun toString (_ : t) = "(h)"
+  fun compare (x,y) = raise NYI
+  fun hash x = raise NYI
+  fun toString (_ : t) = "unit"
 end
