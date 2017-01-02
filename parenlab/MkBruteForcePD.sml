@@ -5,7 +5,7 @@ struct
   open Seq
 
   (* Remove this line when you're done. *)
-  fun parenDist (parens : paren seq) : int option =
+  fun parenDist (parens : paren seq) : int option = 
   let
     val inte = Int.toString
     val pri_check = fn ((NONE, _)|(SOME 0, CPAREN)) => NONE
@@ -13,7 +13,7 @@ struct
       | (SOME n, CPAREN) => SOME (n-1)
     val isValid = fn paren_ => (SOME 0) = (iter pri_check (SOME 0) paren_ ) 
   in 
-    if(isValid(parens) = false) then NONE else 
+    if(isValid(parens) = false orelse length parens = 0) then NONE else 
     SOME let
       val max = fn (a,b)=>if a<b then b else a 
       val n = length parens
