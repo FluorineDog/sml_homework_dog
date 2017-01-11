@@ -8,32 +8,6 @@ struct
   (* Remove this line when you're done. *)
   (*exception NotYetImplemented*)
 
-  (*fun parenDist (parens : paren seq) : int option =*)
-    (*let
-      fun max a b = if(a<b)then b else a
-      fun max3 a b c = max c (max a b)
-
-      fun dist (_, 0) = (~1, ~1, ~1, ~1)
-        | dist (beg, 1) = if(nth parens beg = OPAREN) then (0,0,1,0) else (1,0,0,0)
-        | dist (beg:int, size:int):int*int*int*int = 
-        let
-          val mid = beg + size div 2;
-          val (leftL, midL, rightL, maxL) = dist(beg, size div 2)
-          val (leftR, midR, rightR, maxR) = dist(mid, size+beg - mid) 
-          val result = if(rightL = leftR) 
-            then (leftL, midL + rightL + leftR + midR, rightR, (max3 maxL (rightL+leftR) maxR))
-            else if (rightL > leftR) then (leftL, midL, rightL+leftR+midR+rightR, maxL) 
-            else (leftL+midL+rightL+leftR, midR , rightR, maxR)
-        in
-          result
-        end
-    in 
-      let 
-        val (left, mid, right, max) = dist(0, length(parens))
-      in
-        if(left = 0 andalso right = 0) then (SOME (max-2)) else NONE
-      end
-    end*)
   exception NYI
   fun parenDist (parens : paren seq) : int option =
     let
@@ -41,7 +15,8 @@ struct
       fun max3 a b c = max (max a b) c
       fun dist S = case length S of 
           0 => ((~1,~1),~1,(~1,~1),~1)
-        | 1 => if nth S 0 = OPAREN then ((0,0),0,(1,1),0) else ((1,1),0,(0,0),0)
+        | 1 => if nth S 0 = OPAREN 
+               then ((0,0),0,(1,1),0) else ((1,1),0,(0,0),0)
         | n => 
           let
             val mid = n div 2
@@ -66,6 +41,7 @@ struct
 
           (*((LP,LS),MS,(RP,RS),MAX)*)
     in
-      case dist parens of (L, MS, R, MAX) => if(L=(0,0) andalso R=(0,0))then SOME (MAX-2) else NONE
+      case dist parens of (L, MS, R, MAX)
+       => if(L=(0,0) andalso R=(0,0))then SOME (MAX-2) else NONE
     end
 end
