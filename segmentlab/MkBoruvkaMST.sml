@@ -11,7 +11,7 @@ struct
   type mapping_t = vertex seq
   type record_t = edge seq List.list
   (* Remove this exception when you're done! *)
-  exception Byi of int*int
+  exception Byi of unit*unit
   fun pint n = print ((Int.toString n)^"$")
   fun MST (E : edge seq, n : int) : edge seq =
     let
@@ -25,30 +25,34 @@ struct
         if N = 1 then R else
         let
           val _ = () 
-          (*$$ is base mapping*)
+          (*$$ is base mapping. SS:original_index=>SCC_index*)
           val $$ = mask M
+          (*use given algorithm (from pdf) to get light edges*)
           val injection = map (fn (EDGE:edge)=>(($$ o #1) EDGE, EDGE)) EE
           val light_edges = inject injection (null_edges N)
+          (*filter Tail=>Head edges*)
           val coinResult = Rand.flip r N
-          fun isHead u = nth coinResult ($$ u) = 1
-          val starlines = filter (fn(u,v,_)=>isHead u andalso (not o isHead) v) light_edges
+          fun isHead u = nth coinResult ($$ u) = 0
+          val starlines = filter (fn(u,v,_)=>isHead v andalso (not o isHead) u) light_edges
+          (*Record with linked list*)
           val R' = starlines::R
-          val N'' = N - length starlines
-          val injectionStar = map (fn(u,v,_)=>($$ v,0)) starlines
+          (**)
+          val injectionStar = map (fn(u,v,_)=>($$ u,0)) starlines
           val (bottomMapping,N') = scan op+ 0 (inject injectionStar (tabulate (fn _=>1) N))
-          val _ = if(N''<>N') then raise Byi (N',N'') else ()
-          val injectionMapping = map (fn(u,v,_)=>(v, mask M u)) starlines
-          val M' = inject injectionMapping M 
-          val M'' = map (mask bottomMapping) M' 
-          val ## = mask M''
+          val injectionMapping = map (fn(u,v,_)=>($$ u, $$ v)) starlines
+          (*middle mapping: map $$u=>$$v *)
+          val middleMapping = inject injectionMapping (tabulate (fn x=>x) N)
+          val M' = tabulate (mask bottomMapping o mask middleMapping o $$) n 
+          val ## = mask M'
           val EE' = filter (fn(u,v,_)=>(## u <> ## v)) EE
           val r' = Rand.next r
           (*filter*)
         in
-          helper R' M'' EE' N' r'
+          helper R' M' EE' N' r'
         end
+      val E'= sort (Int.compare o (fn(a,b)=>(#3 b,#3 a))) E
     in
-      (flatten o fromList) (helper nil (tabulate (fn x=>x) n) E n (Rand.fromInt 0))
+      (flatten o fromList) (helper nil (tabulate (fn x=>x) n) E' n (Rand.fromInt 0))
     end
     (*raise NotYetImplemented*)
 
