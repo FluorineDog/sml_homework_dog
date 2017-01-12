@@ -11,8 +11,8 @@ struct
   type mapping_t = vertex seq
   type record_t = edge seq List.list
   (* Remove this exception when you're done! *)
-  exception nyi
-
+  exception Byi of int*int
+  fun pint n = print ((Int.toString n)^"$")
   fun MST (E : edge seq, n : int) : edge seq =
     let
       fun null_edges N = tabulate (fn _=>(~1,~1,1000000)) N
@@ -24,25 +24,28 @@ struct
       fun helper (R:record_t) (M:mapping_t) (EE:edge seq) (N:int) (r:Rand.rand):record_t =
         if N = 1 then R else
         let
-          val ## = mask M (*create mapping function*)
-          val injection = map (fn (EDGE:edge)=>((## o #1) EDGE, EDGE)) EE
+          val _ = () 
+          (*$$ is base mapping*)
+          val $$ = mask M
+          val injection = map (fn (EDGE:edge)=>(($$ o #1) EDGE, EDGE)) EE
           val light_edges = inject injection (null_edges N)
           val coinResult = Rand.flip r N
-          fun isHead u = nth coinResult u = 1
+          fun isHead u = nth coinResult ($$ u) = 1
           val starlines = filter (fn(u,v,_)=>isHead u andalso (not o isHead) v) light_edges
           val R' = starlines::R
-          
-          (*bottomMapping is head vertex index => next index*)
-          (*use some nonobvibious trick*)
-          val (bottomMapping,_) = scan op+ 0 coinResult
-          val $$ = mask bottomMapping
-          val M' = map $$ M 
-          val $$## = $$ o ##
-          val EE' = filter (fn(u,v,_)=>($$## u <> $$## v)) EE
+          val N'' = N - length starlines
+          val injectionStar = map (fn(u,v,_)=>($$ v,0)) starlines
+          val (bottomMapping,N') = scan op+ 0 (inject injectionStar (tabulate (fn _=>1) N))
+          val _ = if(N''<>N') then raise Byi (N',N'') else ()
+          val injectionMapping = map (fn(u,v,_)=>(v, mask M u)) starlines
+          val M' = inject injectionMapping M 
+          val M'' = map (mask bottomMapping) M' 
+          val ## = mask M''
+          val EE' = filter (fn(u,v,_)=>(## u <> ## v)) EE
           val r' = Rand.next r
           (*filter*)
         in
-          helper R' M' EE' N' r'
+          helper R' M'' EE' N' r'
         end
     in
       (flatten o fromList) (helper nil (tabulate (fn x=>x) n) E n (Rand.fromInt 0))
