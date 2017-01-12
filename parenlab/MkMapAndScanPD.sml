@@ -13,16 +13,16 @@ struct
       val ranktable = append(ranktablePart, singleton final)
       val zero_cparens = filter (fn (a,_)=>a<=0) ranktable
  
-      val level_part = map (fn (a, _)=>a) zero_cparens
+      val level_part = map #1 zero_cparens
     in
       if 0 > reduce (fn(a,b)=>if a=0 andalso b=0 then 0 else ~1) 0 level_part
         orelse #1 final <> 0 orelse length parens = 0 then NONE 
       else let
-        val rank_part = map (fn(_,b)=>b) zero_cparens
+        val rank_part = map #2 zero_cparens
         val final_table = 
           tabulate (fn n =>((nth rank_part (n+1)) - (nth rank_part n))) (length rank_part - 1) 
 
-        val result = reduce (fn(a,b)=>if a<b then b else a) 0 final_table
+        val result = reduce Int.max 0 final_table
       in 
         SOME (result-2)
       end 
