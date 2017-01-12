@@ -1,1 +1,1 @@
-echo 'CM.make "sources.cm";use "testing";Tester.testSegmenter("images/face.png","out.png",5);' | rlwrap sml @SMLload=support/refSol.x86-linux
+echo 'CM.make "sources.cm";use "testing";Tester.testSegmenter("images/face.png","out.png",5);' | rlwrap sml @SMLload=support/refsol.x86-linux
