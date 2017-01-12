@@ -13,14 +13,12 @@ struct
     let
       fun max a b = Int.max (a,b)
       fun max3 a b c = max (max a b) c
-      fun dist S = case length S of 
-          0 => ((~1,~1),~1,(~1,~1),~1)
-        | 1 => if nth S 0 = OPAREN 
+      fun dist S = case showt S of 
+          EMPTY => ((~1,~1),~1,(~1,~1),~1)
+        | ELT elt => if elt = OPAREN 
                then ((0,0),0,(1,1),0) else ((1,1),0,(0,0),0)
-        | n => 
+        | NODE (LSTR, RSTR) => 
           let
-            val mid = n div 2
-            val (LSTR, RSTR) = (take (S,mid), drop (S,mid))
             val (L1, MS1, (RP1, RS1), MAX1) = dist LSTR
             val ((LP2, LS2), MS2, R2, MAX2) = dist RSTR
             val result = case Int.compare (RP1,LP2) of 
