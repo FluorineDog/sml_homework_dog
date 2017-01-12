@@ -25,7 +25,7 @@ struct
         if N = 1 then R else
         let
           val _ = () 
-          (*$$ is base mapping. SS:original_index=>SCC_index*)
+          (*$$ is base mapping. $$:vertex_original_index=>SCC_index*)
           val $$ = mask M
           (*use given algorithm (from pdf) to get light edges*)
           val injection = map (fn (EDGE:edge)=>(($$ o #1) EDGE, EDGE)) EE
@@ -36,20 +36,28 @@ struct
           val starlines = filter (fn(u,v,_)=>isHead v andalso (not o isHead) u) light_edges
           (*Record with linked list*)
           val R' = starlines::R
-          (**)
+          (*rule out Tails vertex that is on a valid edge*)
           val injectionStar = map (fn(u,v,_)=>($$ u,0)) starlines
-          val (bottomMapping,N') = scan op+ 0 (inject injectionStar (tabulate (fn _=>1) N))
+          val HeadsAndUnuseTails = inject injectionStar (tabulate (fn _=>1) N)
+          (*use it to generate bottomMapping: SCC_index=>new_SCC_index*)
+          (*and N': total number of new_SCC*)
+          val (bottomMapping,N') = scan op+ 0 HeadsAndUnuseTails
+          (*Tails should be bound to corresponding Heads*)
+          (*middle mapping: Tail_SCC_index =>Head_SCC_index*)
           val injectionMapping = map (fn(u,v,_)=>($$ u, $$ v)) starlines
-          (*middle mapping: map $$u=>$$v *)
           val middleMapping = inject injectionMapping (tabulate (fn x=>x) N)
+          (*composite mappings together*)
           val M' = tabulate (mask bottomMapping o mask middleMapping o $$) n 
+          (*## = new_$$*)
           val ## = mask M'
+          (*filter out edges in the same new_SCC*)
           val EE' = filter (fn(u,v,_)=>(## u <> ## v)) EE
+          (*next random seed*)
           val r' = Rand.next r
-          (*filter*)
         in
           helper R' M' EE' N' r'
         end
+      (*Sort edges decreasingly*)
       val E'= sort (Int.compare o (fn(a,b)=>(#3 b,#3 a))) E
     in
       (flatten o fromList) (helper nil (tabulate (fn x=>x) n) E' n (Rand.fromInt 0))
