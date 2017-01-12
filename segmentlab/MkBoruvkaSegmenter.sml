@@ -15,6 +15,7 @@ struct
   (* Remove this exception when you're done! *)
   (*exception NotYetImplemented*)
 
-  fun findSegments (E, n) initial_credit = empty()
+  fun findSegments (E, n) initial_credit = 
+    tabulate (fn x=>x-Int.mod(x, 15) ) n
     (*raise NotYetImplemented*)
 end
