@@ -47,8 +47,8 @@ struct
           val injectionMapping = map (fn(u,v,_)=>($$ u, $$ v)) starlines
           val middleMapping = inject injectionMapping (tabulate (fn x=>x) N)
           (*composite mappings together*)
-          val M' = tabulate (mask bottomMapping o mask middleMapping o $$) n 
           (*## = new_$$*)
+          val M' = tabulate (mask bottomMapping o mask middleMapping o $$) n
           val ## = mask M'
           (*filter out edges in the same new_SCC*)
           val EE' = filter (fn(u,v,_)=>(## u <> ## v)) EE
