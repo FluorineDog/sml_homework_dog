@@ -15,6 +15,6 @@ try:
     data = sys.stdin.read(3*w*h)
     im = Image.frombytes("RGB", (w, h), data, "raw", "RGB", 0, 1)
     im.save(fileName, "PNG")
-except IOError as e:
+except IOError, e:
     print >> sys.stderr, "%s: %s\n\nCannot open/write to %s" % (sys.argv[0], str(e), fileName)
 

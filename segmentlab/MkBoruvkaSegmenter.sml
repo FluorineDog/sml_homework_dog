@@ -19,7 +19,8 @@ struct
     let
        
     in
-      raise nyi
+      (*raise nyi*)
+      tabulate (fn x=>x-Int.mod(x,1)) n_
     end
     (*raise NotYetImplemented*)
 end

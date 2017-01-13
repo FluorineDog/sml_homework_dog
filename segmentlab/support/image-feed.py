@@ -15,6 +15,6 @@ try:
     pixelStream = rgbImg.getdata()
     for (r,g,b) in pixelStream:
         sys.stdout.write(pack("BBB", r,g,b)) ## 1-byte each for r,g,b
-except IOError as e:
+except IOError, e:
     print >> sys.stderr, "%s: %s\n\nCannot open/understand %s" % (sys.argv[0], str(e), fileName)
 
