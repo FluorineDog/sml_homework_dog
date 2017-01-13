@@ -1,1 +1,8 @@
-echo 'CM.make "sources.cm";use "testing";Tester.testSegmenter("images/face.png","out.png",200);' | rlwrap sml @SMLload=support/refsol.x86-linux
+echo 'CM.make "sources.cm";use "testing";
+Tester.testSegmenter("images/skittles.png","out10000.png",10000);
+Tester.testSegmenter("images/skittles.png","out5000.png",5000);
+Tester.testSegmenter("images/skittles.png","out1000.png",1000);
+Tester.testSegmenter("images/skittles.png","out100.png",100);
+Tester.testSegmenter("images/face.png","face500.png",500);
+Tester.testSegmenter("images/face.png","face1000.png",1000);
+' | rlwrap sml @SMLload=support/refsol.x86-linux
