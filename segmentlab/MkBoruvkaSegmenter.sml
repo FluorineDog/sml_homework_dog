@@ -29,8 +29,8 @@ struct
         let
           val new_value = mask R o $$
         in
-          (*fn (u,v,w) => Int.min(new_value u, new_value v) >= w *)
-          fn _ =>true
+          fn (u,v,w) => Int.min(new_value u, new_value v) >= w 
+          (*fn _ =>true*)
         end
           
       fun helper (R:credit_t) (M:mapping_t) (EE:edge seq) (N:int) (r:Rand.rand):mapping_t =
@@ -68,10 +68,11 @@ struct
             val SCC_info = (collect Int.compare o map (fn(u,v,w)=>(v,(value u,w))) ) starlines
             val join = reduce (fn((r1, w1),(r2,w2))=>(Int.min (r1,r2), w1+w2)) (10000000, 0)
             val injectionNewSCC = map (fn (v,S)=>(case join S of(r,w)=>(## v, Int.min (value v, r)-w ))) SCC_info
-            val injectionOldSCC = mapIdx (fn (v, w)=>(## v, w)) R
-            val null_R = tabulate (fn _=> ~1) N'
+            val injectionOldSCC = mapIdx (fn (v, w)=>(mask bottomMapping (mask middleMapping v), w)) R
+            val null_R = tabulate (fn _=> ~10000000) N'
           in
             val R' = inject (append(injectionOldSCC, injectionNewSCC)) null_R
+            val _ = map (fn x=> if x = ~10000000 then raise nyi else ()) R'
           end
           (*filter out edges in the same new_SCC*)
           val _ = pint (length EE)
@@ -91,7 +92,7 @@ struct
     in
       (*raise nyi*)
       (*tabulate (fn x=>x-Int.mod(x,1)) n*)
-      helper R0 M0 E0 n (Rand.fromInt 0) 
+      helper R0 M0 E0 n (Rand.fromInt 10) 
     end
     (*raise NotYetImplemented*)
 end
