@@ -74,7 +74,7 @@ struct
           NONE => R 
         | SOME {left, key, value, right} => 
           case Key.compare (k, key) of
-            EQUAL=>let val R' = last right 
+            EQUAL=>let val R' = first right 
                     in if Option.isSome R' then R' else R end
           | GREATER=>helper right R
           | LESS =>helper left (SOME(key, value))
@@ -83,12 +83,18 @@ struct
     end
 
   fun join (L : 'a table, R : 'a table) : 'a table =
-    raise NYI
+    Tree.join (L,R)
 
   fun split (T : 'a table, k : key) : 'a table * 'a option * 'a table =
-    raise NYI
+    Tree.splitAt (T, k)  
 
   fun getRange (T : 'a table) (low : key, high : key) : 'a table =
-    raise NYI
-
+    let 
+      val T' = case previous T low of NONE=>T 
+               | SOME(k, _)=> #3 (split (T,k))
+      val T''= case next T high of NONE => T'
+               | SOME(k, _)=> #1 (split (T',k))
+    in
+      T''
+    end 
 end

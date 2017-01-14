@@ -13,8 +13,11 @@ struct
   structure RD = Random210
 
   val ordSet2 = % [5, 7, 2, 8, 9, 1]
-  val ordSet1 = RD.randomIntSeq (RD.fromInt 0) (SOME (0,100)) 10
-  val s = map (fn e=>(ordSet1, e)) ordSet1
+  val ordSet1 = RD.randomIntSeq (RD.fromInt 0) (SOME (0,1000)) 10
+  val ordSet3 = RD.randomIntSeq (RD.fromInt 10) (SOME (1001,2000)) 100
+  val s = toList(map (fn e=>(ordSet1, e)) ordSet1)
+  val s1 = toList(map (fn e=>(ordSet1, e+1)) ordSet1)
+  val s2 = toList(map (fn e=>(ordSet1, e-1)) ordSet1)
 
   val testsFirst = [
     ordSet1,
@@ -28,25 +31,26 @@ struct
     (ordSet1, 8),
     (ordSet1, 1),
     (% [], 8)
-  ]@(toList s)
+  ]@s@s1@s2
   val testsNext = [
     (ordSet1, 8),
     (ordSet1, 100),
     (% [], 8)
-  ]@(toList s)
+  ]@s@s1@s2
   val testsJoin = [
-    (ordSet1, % [100]),
-    (ordSet1, % [3]),
-    (% [], % [100])
+    (% [], % [100]),
+    (ordSet1, ordSet3),
+    (ordSet1, % [~1]),
+    (ordSet1, % [100001])
   ]
   val testsSplit = [
     (ordSet1, 7),
     (ordSet1, 100),
     (% [], 7)
-  ]
+  ]@s@s1@s2
   val testsRange = [
-    (ordSet1, (5,8)),
-    (ordSet1, (10,12)),
+    (ordSet2, (5,8)),
+    (ordSet2, (10,12)),
     (% [], (5,8))
   ]
 
