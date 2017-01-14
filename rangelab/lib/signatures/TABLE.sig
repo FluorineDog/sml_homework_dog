@@ -32,6 +32,7 @@ sig
 
   val iter   : ('b * (key * 'a) -> 'b) -> 'b -> 'a table -> 'b
   val iterh  : ('b * (key * 'a) -> 'b) -> 'b -> 'a table -> ('b table * 'b)
+  val iterih  : ('b * (key * 'a) -> 'b) -> 'b -> 'a table -> 'b table
   val reduce : ('a * 'a -> 'a) -> 'a -> 'a table -> 'a
 
   val merge   : ('a * 'a -> 'a) -> ('a table * 'a table) -> 'a table

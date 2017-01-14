@@ -26,7 +26,8 @@ struct
            | SOME {key, value, left, right} =>
              iter f (f (iter f b left, (key, value))) right
 
-    fun iterh f b =
+            
+   fun iterih f b =
         let
           fun itr state t =
               case expose t
@@ -36,7 +37,22 @@ struct
                      val (tL, sL) = itr state l
                      val state' = f (sL, (k,v))
                      val (tR, sR) = itr state' r
-                   in (makeNode {key=k, value=sR, left=tL, right=tR}, sR)
+                   in (makeNode {key=k, value=state', left=tL, right=tR}, sR)
+                   end
+        in #1 o itr b
+        end
+
+   fun iterh f b =
+        let
+          fun itr state t =
+              case expose t
+                of NONE => (empty (), state)
+                 | SOME {key=k, value=v, left=l, right=r} =>
+                   let
+                     val (tL, sL) = itr state l
+                     val state' = f (sL, (k,v))
+                     val (tR, sR) = itr state' r
+                   in (makeNode {key=k, value=sL, left=tL, right=tR}, sR)
                    end
         in itr b
         end
