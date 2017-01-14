@@ -33,7 +33,7 @@ struct
   fun count (T : countTable)
                    ((xLeft, yHi) : point, (xRght, yLo) : point) : int  =
     let
-      fun countEdgeAndLeft Edge = case Edge of NONE => ~1000
+      fun countEdgeAndLeft Edge = case Edge of NONE => 0
         | SOME PT => size (getRange PT (yLo, yHi))
 
       val leftEdge = Option.map #2 (previous T xLeft)
@@ -42,7 +42,7 @@ struct
         | NONE => Option.map #2 (previous T xRght)
       val rightInc = countEdgeAndLeft rightEdges
       (*val _ = iter (pixxt o size o #2 o #2) () T*)
-      val _ = iter (pixxt o countEdgeAndLeft o SOME o #2 o #2) () T
+      (*val _ = iter (pixxt o countEdgeAndLeft o SOME o #2 o #2) () T*)
     in
       rightInc - leftExc
     end
