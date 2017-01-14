@@ -13,12 +13,21 @@ struct
 
   (* Remove this before submitting! *)
   exception NYI
+  exception Duplicate
 
   (* Define this yourself *)
-  type countTable = unit
+  (*type 'a countTable = ('a table) seq*)
+  type countTable = unit table table
 
   fun makeCountTable (S : point seq) : countTable =
-    raise NYI
+    let
+      val PointTable = fromSeq S
+      fun insertKey (T:unit table, (y:Key.t, _)):unit table = 
+        insert (fn _=>raise Duplicate) (y,()) T
+      val T = iterh insertKey 
+    in
+      raise NYI
+    end
 
   fun count (T : countTable)
                    ((xLeft, yHi) : point, (xRght, yLo) : point) : int  =
