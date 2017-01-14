@@ -10,8 +10,11 @@ struct
    *
    * Note that for an ordered table test, you should just specify a sequence
    * of keys (and values will be automatically set to unit). *)
+  structure RD = Random210
 
-  val ordSet1 = % [5, 7, 2, 8, 9, 1]
+  val ordSet2 = % [5, 7, 2, 8, 9, 1]
+  val ordSet1 = RD.randomIntSeq (RD.fromInt 0) (SOME (0,100)) 10
+  val s = map (fn e=>(ordSet1, e)) ordSet1
 
   val testsFirst = [
     ordSet1,
@@ -25,12 +28,12 @@ struct
     (ordSet1, 8),
     (ordSet1, 1),
     (% [], 8)
-  ]
+  ]@(toList s)
   val testsNext = [
     (ordSet1, 8),
-    (ordSet1, 9),
+    (ordSet1, 100),
     (% [], 8)
-  ]
+  ]@(toList s)
   val testsJoin = [
     (ordSet1, % [100]),
     (ordSet1, % [3]),
