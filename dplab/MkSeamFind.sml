@@ -38,6 +38,7 @@ struct
         append(drop (body,1), singleton tail)
       val height = length G
       val width = length (nth G 0) 
+      val _ = pint(width)
       val base = tabulate (fn _=> (~1, 0.0)) width
       fun choose line w = let 
         val i2 = if w = 0 orelse nth line (w-1) > nth line w then w else w-1
@@ -46,7 +47,6 @@ struct
         in
           i3
         end
-      val _=pint 1
       fun move ((S:gradient seq, L:int seq list), M:gradient seq) = 
         let
           val newL = tabulate (choose S) width
@@ -55,20 +55,14 @@ struct
         in
           (S',L')
         end
-      val _=pint 2
-      val _=pint (length G)
       val (lastline,prelist) = iter move ((nth G 0), nil) (drop (G,1))
-      val _ = pint (List.length prelist)
 
-      val _=pint 3
       val (minIndex,_) = reduce (fn ((n1,g1),(n2,g2))=> 
         if g1>g2 then (n2,g2) else (n1,g1)) (0,1E50) (enum lastline)
       val finalSeams = foldl (fn(L, seams)=>(nth L (hd seams))::seams)
         (minIndex::nil) prelist
       
-      val _ = pint (List.length finalSeams)
       val _ = if List.length finalSeams <> height then raise NotYetImplemented else ()
-      val _ = pint 4
 
     in
       fromList finalSeams
