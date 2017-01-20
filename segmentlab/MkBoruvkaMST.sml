@@ -13,7 +13,7 @@ struct
   (* Remove this exception when you're done! *)
   exception Byi of unit*unit
   fun pint n = print ((Int.toString n)^"$")
-  fun MST (E : edge seq, n : int) : edge seq =
+  fun MST (E : edge seq, n : int) : edge seq = if n = 0 then empty() else 
     let
       fun null_edges N = tabulate (fn _=>(~1,~1,1000000)) N
       fun mask (mapping:mapping_t) (v:vertex):vertex = nth mapping v
