@@ -1,5 +1,5 @@
 **/.cm/
 **/*.pdf
 **/.vscode/
-**/*.png
+!**/*.png
 **/*.jpg
