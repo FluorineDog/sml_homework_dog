@@ -17,8 +17,6 @@ struct
   (*fun pint n = print ((Int.toString n)^"$")*)
   (* Remove this exception when you're done! *)
   (*exception NotYetImplemented*)
-  fun pint x = print ((Int.toString x)^"$")
-  fun pint2 x = print ((Int.toString x)^"#")
   exception nyi
   fun findSegments (E_, n) initial_credit = 
   let
@@ -35,6 +33,7 @@ struct
       (*$$ is base mapping. $$:vertex_original_index=>SCC_index*)
       val $$ = mask M
       val value = mask R o $$
+      (*filter out edges in the same new_SCC*)
       val EE = filter (fn(u,v,w)=>($$ u <> $$ v andalso checkEdge value (u,v,w))) EE0
       (*use given algorithm (from pdf) to get light edges*)
       val injection = map (fn (EDGE:edge)=>(($$ o #1) EDGE, EDGE)) EE
@@ -65,27 +64,18 @@ struct
         val SCC_info = (collect Int.compare o map (fn(u,v,w)=>($$ v,(value u,w))) ) starlines
         val join = reduce (fn((r1, w1),(r2,w2))=>(Int.min (r1,r2), w1+w2)) (initial_credit, 0)
         val injectionNewSCC = map (fn (scc,S)=>(case join S of(r,w)=>
-          (NewFromOld scc, Int.min (valueScc scc, r)-w )
-            (*before pint r before pint(valueScc scc) before pint2 w before print "\t"*)
-            )) SCC_info
-        (*val _= print "\n"*)
+          (NewFromOld scc, Int.min (valueScc scc, r)-w ))) SCC_info
         val injectionOldSCC = mapIdx (fn (v, r)=>(mask bottomMapping (mask middleMapping v), r)) R
         val null_R = tabulate (fn _=> ~10000000) N'
       in
-        
         val R' = inject (append(injectionOldSCC, injectionNewSCC)) null_R
-        (*val _ = map (fn x=> if x = ~10000000 then raise nyi else ()) R'*)
       end
-      (*filter out edges in the same new_SCC*)
-      (*val EE' = filter (fn(u,v,w)=>(## u <> ## v andalso checkEdge R' ## (u,v,w))) EE*)
       (*next random seed*)
       val r' = Rand.next r
     in          
       if length EE = 0 then M else
-
-      helper R' M' EE N' r'
+        helper R' M' EE N' r'
     end
-      
     (*Sort edges decreasingly*)
     val R0 = tabulate (fn _ => initial_credit) n
     val M0 = tabulate (fn x=>x) n
