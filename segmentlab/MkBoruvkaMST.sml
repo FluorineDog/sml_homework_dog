@@ -4,15 +4,14 @@ functor MkBoruvkaMST (structure Seq : SEQUENCE
 struct
   structure Seq = Rand.Seq
   open Seq
-
+  exception Byi of unit*unit
+  fun pint n = print ((Int.toString n)^"$")
   type vertex = int
   type weight = int
   type edge = vertex * vertex * weight
   type mapping_t = vertex seq
   type record_t = edge seq List.list
   (* Remove this exception when you're done! *)
-  exception Byi of unit*unit
-  fun pint n = print ((Int.toString n)^"$")
   fun MST (E : edge seq, n : int) : edge seq = if n = 0 then empty() else 
     let
       fun null_edges N = tabulate (fn _=>(~1,~1,1000000)) N
