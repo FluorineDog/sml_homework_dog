@@ -32,8 +32,6 @@ struct
       
       val size = length G
       val inf = size*2+1
-      (*type State = (int*int*vertex*int) option*)
-      (*type StateSeq = State ST.stseq*)
       type StateSeq = edge list
       type discSeq = int option ST.stseq
       fun DFS ((p, S:discSeq, R:StateSeq, min_reached, t),cur) = 
@@ -54,18 +52,6 @@ struct
         iter DFS 
         (~1, construct NONE size, nil, inf, 0)
         (tabulate (fn x=>x) size)
-      (*val (_,_,final_record,_,_) =
-        iter DFS 
-        (~1, construct NONE size, construct NONE size, inf, 0)
-        (tabulate (fn x=>x) size)*)
-      (*val extractEdges =
-        let 
-          fun convertor (dest, SOME (disc,_,parent,min)) = 
-            ((parent, dest),min=disc andalso parent <> ~1)
-            | convertor (_, NONE) = raise Segmentfault 
-        in
-          mapIdx convertor (ST.toSeq final_record)
-        end*)
     in
       (*(map #1 o filter #2) extractEdges *)
       fromList final_record 

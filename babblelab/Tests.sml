@@ -26,7 +26,8 @@ struct
    * corpuses will not be submitted. *)
   val testsKGramStats : ((string * int) * (string list)) list = [
     ((corpus, 5),
-        ["direction",
+        ["",
+          "direction",
          "time",
          "direction of time",
          "would write",

@@ -9,5 +9,6 @@ Group is
   Tests.sml
   support/MkRefSeqUtil.sml
   support/MkRefKGramStats.sml
+  skylineReload.sml
 
   $/basis.cm

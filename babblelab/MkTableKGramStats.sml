@@ -15,6 +15,8 @@ struct
   (* Remove this line when you're done *)
   exception NotYetImplemented
   (* You must define the abstract kgramstats type *)
+  (*the first element is a mapping from kgrams to corresponding hist*)
+  (*the second element is maxK*)
   type kgramstats = (token hist) T.table * int
 
   fun makeStats (corpus : string) (maxK : int) : kgramstats =

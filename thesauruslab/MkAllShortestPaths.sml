@@ -18,8 +18,8 @@ struct
    *)
 
   (*graph is of adjacency list*)
-  (*asp is the reverse of asp DAG*)
   type graph = Set.set table
+  (*asp is the reverse of asp DAG*)
   type asp = graph
 
   (* Task 2.1 *)
