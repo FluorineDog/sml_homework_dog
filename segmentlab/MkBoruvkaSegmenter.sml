@@ -14,7 +14,7 @@ struct
   type mapping_t = vertex seq
   type credit_t = int seq
 
-  fun pint n = print ((Int.toString n)^"$")
+  (*fun pint n = print ((Int.toString n)^"$")*)
   (* Remove this exception when you're done! *)
   (*exception NotYetImplemented*)
   exception nyi
@@ -30,19 +30,15 @@ struct
           val new_value = mask R o $$
         in
           fn (u,v,w) => Int.min(new_value u, new_value v) >= w 
-          (*fn _ =>true*)
         end
           
       fun helper (R:credit_t) (M:mapping_t) (EE:edge seq) (N:int) (r:Rand.rand):mapping_t =
         if length EE = 0 then M else
         let
-          val _ = () 
           (*$$ is base mapping. $$:vertex_original_index=>SCC_index*)
           val $$ = mask M
           (*use given algorithm (from pdf) to get light edges*)
-          val _ = pint (length EE)
           val injection = map (fn (EDGE:edge)=>(($$ o #1) EDGE, EDGE)) EE
-          val _ = pint (length EE)
           val light_edges = inject injection (null_edges N)
           (*filter Tail=>Head edges*)
           val coinResult = Rand.flip r N
@@ -75,10 +71,7 @@ struct
             val _ = map (fn x=> if x = ~10000000 then raise nyi else ()) R'
           end
           (*filter out edges in the same new_SCC*)
-          val _ = pint (length EE)
           val EE' = filter (fn(u,v,w)=>(## u <> ## v andalso checkEdge R $$ (u,v,w))) EE
-          val _ = pint (length EE)
-          val _ = print "\n"
           (*next random seed*)
           val r' = Rand.next r
         in
@@ -90,9 +83,6 @@ struct
       val Evalid = filter(checkEdge R0 (mask M0)) E_
       val E0 = sort (Int.compare o (fn(a:edge,b:edge)=>(#3 b,#3 a))) Evalid
     in
-      (*raise nyi*)
-      (*tabulate (fn x=>x-Int.mod(x,1)) n*)
       helper R0 M0 E0 n (Rand.fromInt 10) 
     end
-    (*raise NotYetImplemented*)
 end
